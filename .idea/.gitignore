@@ -7,17 +7,14 @@
 /dataSources/
 /dataSources.local.xml
 
-# General
+# ------------------------------
+# OS-Specific (macOS)
+# ------------------------------
 .DS_Store
 .AppleDouble
 .LSOverride
-Icon[
-]
-
-# Thumbnails
+Icon?
 ._*
-
-# Files that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd
 .Spotlight-V100
@@ -25,59 +22,61 @@ Icon[
 .Trashes
 .VolumeIcon.icns
 .com.apple.timemachine.donotpresent
-
-# Directories potentially created on remote AFP share
 .AppleDB
 .AppleDesktop
 Network Trash Folder
 Temporary Items
 .apdisk
 
-# Prerequisites
-*.d
+# ------------------------------
+# IDEs and Editors
+# ------------------------------
+.idea/
+.vscode/
+.history/
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-/build/
-
-.vscode/*
+# Allow VS Code project config
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
 !.vscode/*.code-snippets
 
-# Local History for Visual Studio Code
-.history/
+# ------------------------------
+# Build Artifacts (CMake)
+# ------------------------------
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+CTestTestfile.cmake
+CMakeScripts/
+compile_commands.json
+install_manifest.txt
+*.cbp
 
-# Built Visual Studio Code Extensions
-*.vsix
+# ------------------------------
+# Compiled Binaries / Libs
+# ------------------------------
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+*.exe
+*.out
+*.app
 
+# Ignore compiled project binary (name it explicitly if known)
+ZOOrk
+
+# ------------------------------
+# Local Dev/Test/Generated
+# ------------------------------
+lib/
+bin/
+test/test_runner
