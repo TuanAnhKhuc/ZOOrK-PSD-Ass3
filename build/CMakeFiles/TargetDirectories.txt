@@ -1,0 +1,3 @@
+/Users/tuananhkhuc/Downloads/ZOOrk/build/CMakeFiles/ZOOrk.dir
+/Users/tuananhkhuc/Downloads/ZOOrk/build/CMakeFiles/edit_cache.dir
+/Users/tuananhkhuc/Downloads/ZOOrk/build/CMakeFiles/rebuild_cache.dir
