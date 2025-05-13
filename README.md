@@ -1,84 +1,22 @@
-# ZOOrk Project - README (Custom Implementation)
+# 🕹️ ZOOrk - Text Adventure Game (C++)
 
-## ✅ Overview
+## 🧭 Overview
 
-This project is a customized and extended version of the original ZOOrk game. The game is a text-based adventure implemented in C++ using object-oriented principles and design patterns such as the Command Pattern and Singleton.
+ZOOrk is a command-line text adventure game implemented in C++. It uses object-oriented design and implements key design patterns such as the Command Pattern, Singleton, and Null Object Pattern. Players can explore a 10-room world, collect items, and interact with the environment using typed commands.
 
-## ✨ Major Enhancements
+---
 
-The following improvements have been made to the base code:
+## 🔑 Features
 
-### 1. **Map Expansion to 10 Rooms**
+- 🌍 **10 interconnected rooms** including a cave, forest, observatory, and secret room
+- 🧱 **Item interaction**: Pick up, inspect, and drop items (e.g., torch, map, key, orb)
+- 🎒 **Inventory system**: See what you're carrying at any time
+- 🚫 **Invalid direction handling** via `NullPassage` (no segmentation faults)
+- 💬 **Simple commands**: Use `go`, `look`, `take`, `drop`, `inventory`, `quit`
 
-* Original map with 3 rooms has been extended to **10 unique rooms** including:
+---
 
-  * Start, South of House, Behind House, Forest Path, Cave Entrance
-  * Dark Cave, Underground Lake, Hilltop, Observatory, Secret Room
-* Each room is connected using two-way `Passage` objects for smooth navigation.
-
-### 2. **Item System Implementation**
-
-* Added `Item` support to rooms and player inventory.
-* Rooms now contain unique items such as:
-
-  * `torch`, `key`, `map`, `rope`, `shovel`, `vial`, `telescope`, `orb`
-* Players can use commands:
-
-  * `look <item>`: Inspect items
-  * `take <item>`: Pick up items from rooms
-  * `drop <item>`: Drop items into rooms
-  * `inventory`: View carried items
-
-### 3. **Bidirectional Passages**
-
-* Ensured that all rooms are connected with forward and reverse `Passage` objects to prevent getting stuck.
-
-### 4. **Enhanced Room Descriptions**
-
-* Room descriptions have been updated to mention visible items in the environment for better immersion.
-
-## 🔧 Files Modified or Added
-
-### `main.cpp`
-
-* Created 10 rooms with detailed descriptions
-* Added items and assigned them to appropriate rooms
-* Connected all rooms using bidirectional `Passage` links
-
-### `Room.h / Room.cpp`
-
-* Added support for:
-
-  * `std::vector<Item*> items`
-  * `addItem()`, `removeItem()`, `getItem()`, `getObject()`
-
-### `Player.h / Player.cpp`
-
-* Added inventory support:
-
-  * `std::vector<Item*> inventory`
-  * `addItem()`, `removeItem()`, `getItem()`, `getInventory()`
-
-### `ZOOrkEngine.h / ZOOrkEngine.cpp`
-
-* Implemented core command handlers:
-
-  * `handleLookCommand()`
-  * `handleTakeCommand()`
-  * `handleDropCommand()`
-  * `handleInventoryCommand()`
-* Extended `run()` to support new commands
-
-## 🧪 Commands to Test
-
-* `look` / `look map`
-* `take torch`
-* `drop key`
-* `inventory`
-* `go north/south/east/west/up/down`
-* `quit`
-
-## 🚀 How to Build and Run
+## 🚀 Build & Run
 
 ```bash
 cd build
@@ -87,12 +25,109 @@ cmake --build .
 ./ZOOrk
 ```
 
-## 📌 Notes
-
-* Requires C++17 or later
-* Compiled and tested on macOS using CMake
-* Ensure TTY input works in your terminal for interactive gameplay
+✅ Requires C++17+ and CMake 3.x  
+Tested on macOS with TTY-compatible terminal
 
 ---
 
-Made with ❤️ by Tuan Anh Khuc
+## 🧪 Commands to Try
+
+```
+go north / n
+look / look <item>
+take <item>
+drop <item>
+inventory
+quit
+```
+
+---
+
+## 🧪 Sample Game Run (Reach the Secret Room)
+
+```plaintext
+You are standing in an open field west of a white house...
+
+> take torch
+> go south
+> go east
+> go east
+> take rope
+> go south
+> take shovel
+> go in
+> take key
+> go down
+> take vial
+> go up
+> go up
+> go north
+> go west
+> go north
+> take telescope
+> go up
+> take map
+> go down
+You have discovered a secret room hidden beneath the observatory.
+
+> look orb
+A glowing orb that pulses softly with energy.
+
+> take orb
+> inventory
+You are carrying:
+- torch
+- rope
+- shovel
+- key
+- vial
+- map
+- orb
+```
+
+---
+
+## 🧱 Key Implementation Changes
+
+### `main.cpp`
+- Created 10 interconnected rooms
+- Added and distributed all interactive items
+- Linked rooms via bidirectional `Passage` objects
+
+### `Room.cpp / Room.h`
+- Added support for `items` list
+- Added `getItem()`, `addItem()`, `removeItem()`, and `getObject()`
+- Overridden `getPassage()` to return `NullPassage` for invalid directions
+
+### `Player.cpp / Player.h`
+- Implemented inventory system using `std::vector<Item*>`
+- Added methods: `addItem()`, `removeItem()`, `getItem()`, and `getInventory()`
+
+### `ZOOrkEngine.cpp / ZOOrkEngine.h`
+- Implemented command handlers:
+  - `handleGoCommand()`
+  - `handleTakeCommand()`
+  - `handleDropCommand()`
+  - `handleLookCommand()`
+  - `handleInventoryCommand()`
+  - `handleQuitCommand()`
+- Refactored direction handling to support aliases (`n`, `s`, etc.)
+- Added feedback for unrecognized commands and invalid directions
+
+### `NullPassage.cpp / NullPassage.h`
+- Implemented **Null Object Pattern**
+- Prevents crashes on invalid moves
+- Displays friendly message: `"You can't go that way."`
+
+---
+
+## 📝 Notes
+
+- Uses modern C++17 features
+- Designed for stability and scalability
+- Fully playable through a terminal
+- Compatible with Linux/macOS
+
+---
+
+
