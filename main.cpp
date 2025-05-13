@@ -6,17 +6,69 @@
 
 
 int main() {
-    // Create rooms
-    auto start = std::make_shared<Room>("Start", "You are standing in an open field west of a white house, with a boarded front door. You see a torch lying in the grass.");
-    auto south_of_house = std::make_shared<Room>("South of House", "You are facing the south side of a white house. There is no door here, and all the windows are barred.");
-    auto behind_house = std::make_shared<Room>("Behind House", "You are behind the white house. A path leads into the forest to the east. In one corner of the house there is a small window which is slightly ajar.");
-    auto forest_path = std::make_shared<Room>("Forest Path", "You are on a path in a dark forest. The trees are thick and block out most of the light.");
-    auto cave_entrance = std::make_shared<Room>("Cave Entrance", "You stand at the entrance to a dark cave. A cold breeze emerges from within.");
-    auto dark_cave = std::make_shared<Room>("Dark Cave", "You are in a pitch-black cave. The walls are damp and echo your every step. You notice something metallic on the ground.");
-    auto underground_lake = std::make_shared<Room>("Underground Lake", "You are by the edge of an underground lake. The water is still and eerily clear.");
-    auto hilltop = std::make_shared<Room>("Hilltop", "You stand on a hilltop with a view of the entire forest and house.");
-    auto observatory = std::make_shared<Room>("Observatory", "You are in an old observatory. Dusty telescopes point at the sky. A map is spread out on a table.");
-    auto secret_room = std::make_shared<Room>("Secret Room", "You have discovered a secret room hidden beneath the observatory.");
+    // Create rooms with embedded hints and path guidance
+    auto start = std::make_shared<Room>(
+        "Start",
+        "You are standing in an open field west of a white house, with a boarded front door.\n "
+        "You see a torch lying in the grass. You can go south to face the house."
+    );
+
+    auto south_of_house = std::make_shared<Room>(
+        "South of House",
+        "You are facing the south side of a white house. There is no door here, and all the windows are barred.\n "
+        "You can go east to move behind the house or north to return to the field."
+    );
+
+    auto behind_house = std::make_shared<Room>(
+        "Behind House",
+        "You are behind the white house. A path leads into the forest to the east.\n "
+        "In one corner of the house there is a small window which is slightly ajar.\n "
+        "You can go east to the forest path, west to the south side, or north to climb the hill."
+    );
+
+    auto forest_path = std::make_shared<Room>(
+        "Forest Path",
+        "You are on a path in a dark forest. The trees are thick and block out most of the light.\n "
+        "A rope lies tangled in the underbrush. You can go west to return behind the house or south toward a cave entrance."
+    );
+
+    auto cave_entrance = std::make_shared<Room>(
+        "Cave Entrance",
+        "You stand at the entrance to a dark cave. A cold breeze emerges from within.\n "
+        "A shovel is half-buried in the dirt nearby. You can go north to the forest or in to enter the cave."
+    );
+
+    auto dark_cave = std::make_shared<Room>(
+        "Dark Cave",
+        "You are in a pitch-black cave. The walls are damp and echo your every step.\n "
+        "You notice something metallic on the ground — it looks like a key.\n "
+        "You can go up to leave the cave or down to explore further."
+    );
+
+    auto underground_lake = std::make_shared<Room>(
+        "Underground Lake",
+        "You are by the edge of an underground lake. The water is still and eerily clear.\n "
+        "A glowing vial floats gently near the shore. You can go up to return to the cave."
+    );
+
+    auto hilltop = std::make_shared<Room>(
+        "Hilltop",
+        "You stand on a hilltop with a view of the entire forest and house.\n "
+        "A telescope sits mounted here, aimed at the stars. You can go south to return behind the house or up into the observatory."
+    );
+
+    auto observatory = std::make_shared<Room>(
+        "Observatory",
+        "You are in an old observatory. Dusty telescopes point at the sky.\n "
+        "A map is spread out on a table, detailing parts of the house and forest.\n "
+        "You can go down to the hilltop or enter a hidden trapdoor above stairs to find a treasure."
+    );
+
+    auto secret_room = std::make_shared<Room>(
+        "Secret Room",
+        "You have discovered a secret room hidden above in the observatory.\n "
+        "A glowing orb pulses softly on a pedestal. You can go down to return to the observatory."
+    );
 
    // Connect rooms with passages (bidirectional)
     Passage::createBasicPassage(start.get(), south_of_house.get(), "south", true);
@@ -43,8 +95,8 @@ int main() {
     Passage::createBasicPassage(hilltop.get(), observatory.get(), "up", true);
     Passage::createBasicPassage(observatory.get(), hilltop.get(), "down", true);
 
-    Passage::createBasicPassage(observatory.get(), secret_room.get(), "down", true);
-    Passage::createBasicPassage(secret_room.get(), observatory.get(), "up", true);
+    Passage::createBasicPassage(observatory.get(), secret_room.get(), "up", true);
+    Passage::createBasicPassage(secret_room.get(), observatory.get(), "down", true);
 
 
  // Example items
