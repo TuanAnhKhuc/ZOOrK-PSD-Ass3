@@ -24,6 +24,9 @@ Explore a 10-room world, collect items, and interact with the environment using 
   - `take <item>`, `drop <item>`  
   - `inventory`, `quit`
 
+    <img width="478" alt="Screenshot 2025-05-13 at 20 46 28" src="https://github.com/user-attachments/assets/c253a449-1033-4c18-a657-0adf9f4cda88" />
+
+
 </details>
 
 ---
