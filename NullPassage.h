@@ -10,6 +10,8 @@
 class NullPassage : public Passage {
 public:
     explicit NullPassage(Room*);
+
+    void enter() override;  // ✅ Add this so it's properly overridden
 };
 
 

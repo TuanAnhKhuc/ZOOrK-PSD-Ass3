@@ -39,25 +39,29 @@ void ZOOrkEngine::run() {
 }
 
 void ZOOrkEngine::handleGoCommand(std::vector<std::string> arguments) {
-    std::string direction;
-    if (arguments[0] == "n" || arguments[0] == "north") {
-        direction = "north";
-    } else if (arguments[0] == "s" || arguments[0] == "south") {
-        direction = "south";
-    } else if (arguments[0] == "e" || arguments[0] == "east") {
-        direction = "east";
-    } else if (arguments[0] == "w" || arguments[0] == "west") {
-        direction = "west";
-    } else if (arguments[0] == "u" || arguments[0] == "up") {
-        direction = "up";
-    } else if (arguments[0] == "d" || arguments[0] == "down") {
-        direction = "down";
-    } else {
-        direction = arguments[0];
+    if (arguments.empty()) {
+        std::cout << "Go where?\n";
+        return;
     }
+
+    std::string direction;
+    if (arguments[0] == "n" || arguments[0] == "north") direction = "north";
+    else if (arguments[0] == "s" || arguments[0] == "south") direction = "south";
+    else if (arguments[0] == "e" || arguments[0] == "east") direction = "east";
+    else if (arguments[0] == "w" || arguments[0] == "west") direction = "west";
+    else if (arguments[0] == "u" || arguments[0] == "up") direction = "up";
+    else if (arguments[0] == "d" || arguments[0] == "down") direction = "down";
+    else direction = arguments[0];
 
     Room* currentRoom = player->getCurrentRoom();
     auto passage = currentRoom->getPassage(direction);
+
+    // ✅ Prevent switching rooms if this is a NullPassage
+    if (dynamic_cast<NullPassage*>(passage.get()) != nullptr) {
+        passage->enter();  // just say "you can't go that way"
+        return;
+    }
+
     player->setCurrentRoom(passage->getTo());
     passage->enter();
 }

@@ -12,6 +12,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include "NullPassage.h"
 
 class ZOOrkEngine {
 public:
