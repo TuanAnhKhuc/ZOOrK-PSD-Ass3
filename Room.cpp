@@ -32,3 +32,35 @@ std::shared_ptr<Passage> Room::getPassage(const std::string &direction) {
         return std::make_shared<NullPassage>(this);
     }
 }
+
+void Room::addItem(Item* item) {
+    items.push_back(item);
+}
+
+bool Room::removeItem(const std::string& name) {
+    for (auto it = items.begin(); it != items.end(); ++it) {
+        if ((*it)->getName() == name) {
+            items.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Item* Room::getItem(const std::string& name) {
+    for (Item* item : items) {
+        if (item->getName() == name) {
+            return item;
+        }
+    }
+    return nullptr;
+}
+
+GameObject* Room::getObject(const std::string& name) {
+    for (Item* item : items) {
+        if (item->getName() == name) {
+            return item;
+        }
+    }
+    return nullptr;
+}

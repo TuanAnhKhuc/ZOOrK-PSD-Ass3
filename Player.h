@@ -8,6 +8,8 @@
 #include "Character.h"
 #include "Location.h"
 #include "NullRoom.h"
+#include <vector>
+#include "Item.h"
 
 class Player : public Character {
 public:
@@ -27,9 +29,15 @@ public:
 
     Player &operator=(const Player &) = delete;
 
+    void addItem(Item* item);
+    bool removeItem(const std::string& name);
+    Item* getItem(const std::string& name);
+    const std::vector<Item*>& getInventory() const;
+
 private:
     static Player *playerInstance;
     Room* currentRoom;
+    std::vector<Item*> inventory;
 
     Player() : Character("You", "You are a person, alike in dignity to any other, but uniquely you."),
                currentRoom(new NullRoom()) {}

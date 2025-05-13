@@ -6,21 +6,72 @@
 
 
 int main() {
-    std::shared_ptr<Room> start = std::make_shared<Room>("start-room",
-                           "You are standing in an open field west of a white house, with a boarded front door.\n");
+    // Create rooms
+    auto start = std::make_shared<Room>("Start", "You are standing in an open field west of a white house, with a boarded front door. You see a torch lying in the grass.");
+    auto south_of_house = std::make_shared<Room>("South of House", "You are facing the south side of a white house. There is no door here, and all the windows are barred.");
+    auto behind_house = std::make_shared<Room>("Behind House", "You are behind the white house. A path leads into the forest to the east. In one corner of the house there is a small window which is slightly ajar.");
+    auto forest_path = std::make_shared<Room>("Forest Path", "You are on a path in a dark forest. The trees are thick and block out most of the light.");
+    auto cave_entrance = std::make_shared<Room>("Cave Entrance", "You stand at the entrance to a dark cave. A cold breeze emerges from within.");
+    auto dark_cave = std::make_shared<Room>("Dark Cave", "You are in a pitch-black cave. The walls are damp and echo your every step. You notice something metallic on the ground.");
+    auto underground_lake = std::make_shared<Room>("Underground Lake", "You are by the edge of an underground lake. The water is still and eerily clear.");
+    auto hilltop = std::make_shared<Room>("Hilltop", "You stand on a hilltop with a view of the entire forest and house.");
+    auto observatory = std::make_shared<Room>("Observatory", "You are in an old observatory. Dusty telescopes point at the sky. A map is spread out on a table.");
+    auto secret_room = std::make_shared<Room>("Secret Room", "You have discovered a secret room hidden beneath the observatory.");
 
-    std::shared_ptr<Room> south_of_house = std::make_shared<Room>("south-of-house",
-                                    "You are facing the south side of a white house.  There is no door here, and all the windows are barred.\n");
-
-    std::shared_ptr<Room> behind_house = std::make_shared<Room>("behind-house",
-                                  "You are behind the white house. A path leads into the forest to the east. In one corner of the house there is a small window which is slightly ajar.\n");
-
+   // Connect rooms with passages (bidirectional)
     Passage::createBasicPassage(start.get(), south_of_house.get(), "south", true);
+    Passage::createBasicPassage(south_of_house.get(), start.get(), "north", true);
+
     Passage::createBasicPassage(south_of_house.get(), behind_house.get(), "east", true);
+    Passage::createBasicPassage(behind_house.get(), south_of_house.get(), "west", true);
 
-    ZOOrkEngine zoork(start);
+    Passage::createBasicPassage(behind_house.get(), forest_path.get(), "east", true);
+    Passage::createBasicPassage(forest_path.get(), behind_house.get(), "west", true);
 
-    zoork.run();
+    Passage::createBasicPassage(forest_path.get(), cave_entrance.get(), "south", true);
+    Passage::createBasicPassage(cave_entrance.get(), forest_path.get(), "north", true);
+
+    Passage::createBasicPassage(cave_entrance.get(), dark_cave.get(), "in", true);
+    Passage::createBasicPassage(dark_cave.get(), cave_entrance.get(), "up", true);
+
+    Passage::createBasicPassage(dark_cave.get(), underground_lake.get(), "down", true);
+    Passage::createBasicPassage(underground_lake.get(), dark_cave.get(), "up", true);
+
+    Passage::createBasicPassage(behind_house.get(), hilltop.get(), "north", true);
+    Passage::createBasicPassage(hilltop.get(), behind_house.get(), "south", true);
+
+    Passage::createBasicPassage(hilltop.get(), observatory.get(), "up", true);
+    Passage::createBasicPassage(observatory.get(), hilltop.get(), "down", true);
+
+    Passage::createBasicPassage(observatory.get(), secret_room.get(), "down", true);
+    Passage::createBasicPassage(secret_room.get(), observatory.get(), "up", true);
+
+
+ // Example items
+    auto torch = new Item("torch", "A bright torch that can light up dark places.");
+    auto key = new Item("key", "A small brass key with a faded number.");
+    auto map = new Item("map", "An old, crumpled map showing part of the mansion.");
+    auto rope = new Item("rope", "A sturdy rope, useful for climbing or pulling heavy things.");
+    auto shovel = new Item("shovel", "A well-used shovel, perfect for digging.");
+    auto vial = new Item("vial", "A glowing vial containing a mysterious liquid.");
+    auto telescope = new Item("telescope", "A telescope aimed at the stars.");
+    auto orb = new Item("orb", "A glowing orb that pulses softly with energy.");
+
+    // Add items to specific rooms
+    start->addItem(torch);
+    dark_cave->addItem(key);
+    observatory->addItem(map);
+    forest_path->addItem(rope);
+    cave_entrance->addItem(shovel);
+    underground_lake->addItem(vial);
+    hilltop->addItem(telescope);
+    secret_room->addItem(orb);
+
+
+    // Set starting room for player
+    ZOOrkEngine engine(start);
+
+    engine.run();
 
     return 0;
 }

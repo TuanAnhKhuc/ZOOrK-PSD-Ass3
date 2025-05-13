@@ -19,9 +19,11 @@ public:
 
     Room(const std::string &, const std::string &, std::shared_ptr<Command>);
 
-//    void addItem(Item*);
-//    void removeItem(const std::string&);
-//    Item* getItem(const std::string&);
+    void addItem(Item*);
+    bool removeItem(const std::string&);
+    Item* getItem(const std::string&);
+    GameObject* getObject(const std::string&);  // For "look <item>" support
+
 //    Item* retrieveItem(const std::string&);
 //    void addCharacter(Character*);
 //    void removeCharacter(const std::string&);
@@ -34,7 +36,8 @@ public:
     std::shared_ptr<Passage> getPassage(const std::string &);
 
 protected:
-//    std::vector<Item*> items;
+    std::vector<Item*> items;
+
 //    std::vector<Character*> characters;
     std::map<std::string, std::shared_ptr<Passage>> passageMap;
 };

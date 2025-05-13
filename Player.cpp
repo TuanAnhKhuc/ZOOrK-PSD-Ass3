@@ -13,3 +13,26 @@ void Player::setCurrentRoom(Room* room) {
 Room* Player::getCurrentRoom() const {
     return currentRoom;
 }
+
+void Player::addItem(Item* item) {
+    inventory.push_back(item);
+}
+
+bool Player::removeItem(const std::string& name) {
+    for (auto it = inventory.begin(); it != inventory.end(); ++it) {
+        if ((*it)->getName() == name) {
+            inventory.erase(it);
+            return true;
+        }
+    }
+    return false;
+}
+
+Item* Player::getItem(const std::string& name) {
+    for (Item* item : inventory) {
+        if (item->getName() == name) {
+            return item;
+        }
+    }
+    return nullptr;
+}

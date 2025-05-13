@@ -22,20 +22,19 @@ void ZOOrkEngine::run() {
         std::vector<std::string> words = tokenizeString(input);
         std::string command = words[0];
         std::vector<std::string> arguments(words.begin() + 1, words.end());
-
-        if (command == "go") {
-            handleGoCommand(arguments);
-        } else if ((command == "look") || (command == "inspect")) {
-            handleLookCommand(arguments);
-        } else if ((command == "take") || (command == "get")) {
-            handleTakeCommand(arguments);
-        } else if (command == "drop") {
-            handleDropCommand(arguments);
-        } else if (command == "quit") {
-            handleQuitCommand(arguments);
-        } else {
-            std::cout << "I don't understand that command.\n";
-        }
+    if (command == "go") {
+        handleGoCommand(arguments);
+    } else if ((command == "look") || (command == "inspect")) {
+        handleLookCommand(arguments);
+    } else if ((command == "take") || (command == "get")) {
+        handleTakeCommand(arguments);
+    } else if (command == "drop") {
+        handleDropCommand(arguments);
+    } else if (command == "inventory") { // 👈 Add this
+        handleInventoryCommand();
+    } else if (command == "quit") {
+        handleQuitCommand(arguments);
+    }  
     }
 }
 
@@ -64,19 +63,62 @@ void ZOOrkEngine::handleGoCommand(std::vector<std::string> arguments) {
 }
 
 void ZOOrkEngine::handleLookCommand(std::vector<std::string> arguments) {
-    // To be implemented
-    std::cout << "This functionality is not yet enabled.\n";
+    Room* currentRoom = player->getCurrentRoom();
+
+    if (arguments.empty()) {
+        // No target: describe the current room
+        std::cout << currentRoom->getDescription() << "\n";
+    } else {
+        std::string targetName = arguments[0];
+        GameObject* target = currentRoom->getObject(targetName);
+
+        if (target != nullptr) {
+            std::cout << target->getDescription() << "\n";
+        } else {
+            std::cout << "You don't see any \"" << targetName << "\" here.\n";
+        }
+    }
 }
 
 void ZOOrkEngine::handleTakeCommand(std::vector<std::string> arguments) {
-    // To be implemented
-    std::cout << "This functionality is not yet enabled.\n";
+    if (arguments.empty()) {
+        std::cout << "Take what?\n";
+        return;
+    }
+
+    std::string itemName = arguments[0];
+    Room* currentRoom = player->getCurrentRoom();
+    Item* item = currentRoom->getItem(itemName);
+
+    if (item != nullptr) {
+        player->addItem(item);
+        currentRoom->removeItem(itemName);
+        std::cout << "You take the " << itemName << ".\n";
+    } else {
+        std::cout << "There is no \"" << itemName << "\" here.\n";
+    }
 }
 
+
 void ZOOrkEngine::handleDropCommand(std::vector<std::string> arguments) {
-    // To be implemented
-    std::cout << "This functionality is not yet enabled.\n";
+    if (arguments.empty()) {
+        std::cout << "Drop what?\n";
+        return;
+    }
+
+    std::string itemName = arguments[0];
+    Item* item = player->getItem(itemName);
+
+    if (item != nullptr) {
+        Room* currentRoom = player->getCurrentRoom();
+        player->removeItem(itemName);
+        currentRoom->addItem(item);
+        std::cout << "You drop the " << itemName << ".\n";
+    } else {
+        std::cout << "You don't have a \"" << itemName << "\".\n";
+    }
 }
+
 
 void ZOOrkEngine::handleQuitCommand(std::vector<std::string> arguments) {
     std::string input;
@@ -88,6 +130,25 @@ void ZOOrkEngine::handleQuitCommand(std::vector<std::string> arguments) {
         gameOver = true;
     }
 }
+
+void ZOOrkEngine::handleInventoryCommand() {
+    std::cout << "You are carrying:\n";
+
+    bool empty = true;
+    for (const auto& item : player->getInventory()) {
+        std::cout << "- " << item->getName() << ": " << item->getDescription() << "\n";
+        empty = false;
+    }
+
+    if (empty) {
+        std::cout << "Nothing.\n";
+    }
+}
+
+const std::vector<Item*>& Player::getInventory() const {
+    return inventory;
+}
+
 
 std::vector<std::string> ZOOrkEngine::tokenizeString(const std::string &input) {
     std::vector<std::string> tokens;
