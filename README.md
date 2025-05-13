@@ -1,22 +1,35 @@
 # 🕹️ ZOOrk - Text Adventure Game (C++)
 
-## 🧭 Overview
+<details open>
+<summary>🧭 Overview</summary>
 
-ZOOrk is a command-line text adventure game implemented in C++. It uses object-oriented design and implements key design patterns such as the Command Pattern, Singleton, and Null Object Pattern. Players can explore a 10-room world, collect items, and interact with the environment using typed commands.
+**ZOOrk** is a command-line text adventure game implemented in C++.  
+It uses object-oriented design and includes key design patterns like the **Command Pattern**, **Singleton**, and **Null Object Pattern**.  
+Explore a 10-room world, collect items, and interact with the environment using typed commands in your terminal.
 
----
-
-## 🔑 Features
-
-- 🌍 **10 interconnected rooms** including a cave, forest, observatory, and secret room
-- 🧱 **Item interaction**: Pick up, inspect, and drop items (e.g., torch, map, key, orb)
-- 🎒 **Inventory system**: See what you're carrying at any time
-- 🚫 **Invalid direction handling** via `NullPassage` (no segmentation faults)
-- 💬 **Simple commands**: Use `go`, `look`, `take`, `drop`, `inventory`, `quit`
+</details>
 
 ---
 
-## 🚀 Build & Run
+<details>
+<summary>🔑 Features</summary>
+
+- 🌍 **10 interconnected rooms**: cave, forest, observatory, secret room, and more  
+- 🧱 **Item interaction**: pick up, inspect, and drop items (e.g., `torch`, `map`, `key`, `orb`)  
+- 🎒 **Inventory system**: view what you're carrying at any time  
+- 🚫 **Safe direction handling** with `NullPassage` — no segmentation faults  
+- 💬 **Supported commands**:
+  - `go <direction>` (or `n`, `s`, `e`, `w`, `in`, `up`, `down`)  
+  - `look`, `look <item>`  
+  - `take <item>`, `drop <item>`  
+  - `inventory`, `quit`
+
+</details>
+
+---
+
+<details>
+<summary>🚀 Build & Run</summary>
 
 ```bash
 cd build
@@ -25,109 +38,125 @@ cmake --build .
 ./ZOOrk
 ```
 
-✅ Requires C++17+ and CMake 3.x  
-Tested on macOS with TTY-compatible terminal
+✅ **Requirements**  
+- C++17 or later  
+- CMake 3.x+  
+- macOS/Linux (TTY-compatible terminal recommended)
+
+</details>
 
 ---
 
-## 🧪 Commands to Try
+<details>
+<summary>🧪 Example Commands</summary>
 
 ```
-go north / n
-look / look <item>
-take <item>
-drop <item>
-inventory
+go north        or: n  
+go south        or: s  
+go east         or: e  
+go west         or: w  
+look            or: look <item>  
+take <item>  
+drop <item>  
+inventory  
 quit
 ```
 
+</details>
+
 ---
 
-## 🧪 Sample Game Run (Reach the Secret Room)
+<details>
+<summary>🎮 Sample Game Run (Find the Secret Room)</summary>
 
-```plaintext
+```
 You are standing in an open field west of a white house...
 
-> take torch
-> go south
-> go east
-> go east
-> take rope
-> go south
-> take shovel
-> go in
-> take key
-> go down
-> take vial
-> go up
-> go up
-> go north
-> go west
-> go north
-> take telescope
-> go up
-> take map
-> go down
+> take torch  
+> go south  
+> go east  
+> go east  
+> take rope  
+> go south  
+> take shovel  
+> go in  
+> take key  
+> go down  
+> take vial  
+> go up  
+> go up  
+> go north  
+> go west  
+> go north  
+> take telescope  
+> go up  
+> take map  
+> go down  
+
 You have discovered a secret room hidden beneath the observatory.
 
-> look orb
+> look orb  
 A glowing orb that pulses softly with energy.
 
-> take orb
-> inventory
+> take orb  
+> inventory  
 You are carrying:
-- torch
-- rope
-- shovel
-- key
-- vial
-- map
+- torch  
+- rope  
+- shovel  
+- key  
+- vial  
+- map  
 - orb
 ```
 
----
-
-## 🧱 Key Implementation Changes
-
-### `main.cpp`
-- Created 10 interconnected rooms
-- Added and distributed all interactive items
-- Linked rooms via bidirectional `Passage` objects
-
-### `Room.cpp / Room.h`
-- Added support for `items` list
-- Added `getItem()`, `addItem()`, `removeItem()`, and `getObject()`
-- Overridden `getPassage()` to return `NullPassage` for invalid directions
-
-### `Player.cpp / Player.h`
-- Implemented inventory system using `std::vector<Item*>`
-- Added methods: `addItem()`, `removeItem()`, `getItem()`, and `getInventory()`
-
-### `ZOOrkEngine.cpp / ZOOrkEngine.h`
-- Implemented command handlers:
-  - `handleGoCommand()`
-  - `handleTakeCommand()`
-  - `handleDropCommand()`
-  - `handleLookCommand()`
-  - `handleInventoryCommand()`
-  - `handleQuitCommand()`
-- Refactored direction handling to support aliases (`n`, `s`, etc.)
-- Added feedback for unrecognized commands and invalid directions
-
-### `NullPassage.cpp / NullPassage.h`
-- Implemented **Null Object Pattern**
-- Prevents crashes on invalid moves
-- Displays friendly message: `"You can't go that way."`
+</details>
 
 ---
 
-## 📝 Notes
+<details>
+<summary>🧱 Key Implementation Changes</summary>
 
-- Uses modern C++17 features
-- Designed for stability and scalability
-- Fully playable through a terminal
-- Compatible with Linux/macOS
+### 🗂️ `main.cpp`
+- Built 10 fully connected rooms  
+- Placed unique interactive items in various locations  
+- Linked rooms using bidirectional `Passage` objects  
+
+### 🏠 `Room.cpp` / `Room.h`
+- Added room inventory system with:
+  - `addItem()`, `removeItem()`, `getItem()`  
+- Overridden `getPassage()` to return `NullPassage` for invalid directions  
+
+### 👤 `Player.cpp` / `Player.h`
+- Implemented player inventory using `std::vector<Item*>`  
+- Added:
+  - `addItem()`, `removeItem()`, `getInventory()`  
+
+### ⚙️ `ZOOrkEngine.cpp` / `ZOOrkEngine.h`
+- Built command handlers:
+  - `handleGoCommand()` (with direction alias support: `n`, `e`, etc.)  
+  - `handleTakeCommand()`, `handleDropCommand()`  
+  - `handleLookCommand()`, `handleInventoryCommand()`, `handleQuitCommand()`  
+- Added default error handling for unknown or invalid commands  
+
+### 🚫 `NullPassage.cpp` / `NullPassage.h`
+- Implemented **Null Object Pattern** for invalid moves  
+- Displays message: `"You can't go that way."`  
+- Prevents null pointer dereferencing and crashes  
+
+</details>
 
 ---
+
+<details>
+<summary>📝 Notes</summary>
+
+- ✅ Built with modern **C++17**  
+- 🧩 Fully modular and scalable for more features  
+- 🎮 Playable directly in any terminal  
+- 🐧 Works on **macOS** and **Linux**  
+- 🛠️ Can be extended with puzzles, enemies, or more rooms  
+
+</details>
 
 
