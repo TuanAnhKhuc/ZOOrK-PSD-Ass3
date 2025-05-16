@@ -14,6 +14,9 @@ Explore a 10-room world, collect items, and interact with the environment using 
 <details>
 <summary>🔑 Features</summary>
 
+  <img width="485" alt="Screenshot 2025-05-16 at 19 24 48" src="https://github.com/user-attachments/assets/c5e82afa-f890-4d48-b6c0-f88d4f6f8bec" />
+
+
 - 🌍 **10 interconnected rooms**: cave, forest, observatory, secret room, and more  
 - 🧱 **Item interaction**: pick up, inspect, and drop items (e.g., `torch`, `map`, `key`, `orb`)  
 - 🎒 **Inventory system**: view what you're carrying at any time  
