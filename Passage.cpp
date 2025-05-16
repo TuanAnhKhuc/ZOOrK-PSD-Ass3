@@ -3,7 +3,7 @@
 //
 
 #include "Passage.h"
-
+#include "Player.h"
 #include <utility>
 #include "PassageDefaultEnterCommand.h"
 
@@ -54,4 +54,14 @@ void Passage::setTo(Room* r) {
 
 Room* Passage::getTo() const {
     return toRoom;
+}
+
+bool Passage::canTraverse(Player* player) const {
+    return true;
+}
+
+void Passage::traverse(Player* player) const {
+    if (player) {
+        player->setCurrentRoom(toRoom);
+    }
 }

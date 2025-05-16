@@ -36,3 +36,12 @@ Item* Player::getItem(const std::string& name) {
     }
     return nullptr;
 }
+
+bool Player::hasItem(const std::string& name) const {
+    for (Item* item : inventory) {
+        if (item && item->getName() == name) {
+            return true;
+        }
+    }
+    return false;
+}

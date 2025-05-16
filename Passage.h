@@ -9,6 +9,7 @@
 #include "Room.h"
 #include <iostream>
 
+class Player;
 class Passage : public Location {
 public:
     static void
@@ -25,6 +26,9 @@ public:
     void setTo(Room*);
 
     Room* getTo() const;
+
+    virtual bool canTraverse(Player* player) const;
+    virtual void traverse(Player* player) const;
 
 protected:
     static std::string oppositeDirection(const std::string &);

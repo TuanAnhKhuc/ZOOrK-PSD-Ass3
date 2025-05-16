@@ -62,8 +62,11 @@ void ZOOrkEngine::handleGoCommand(std::vector<std::string> arguments) {
         return;
     }
 
-    player->setCurrentRoom(passage->getTo());
-    passage->enter();
+    passage->traverse(player);  // Always show appropriate message
+
+    if (passage->canTraverse(player)) {
+    passage->enter();       // Only enter if traversal allowed
+    }
 }
 
 void ZOOrkEngine::handleLookCommand(std::vector<std::string> arguments) {

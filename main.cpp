@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Room.h"
 #include "ZOOrkEngine.h"
+#include "Door.h"
 
 
 int main() {
@@ -52,10 +53,12 @@ int main() {
     );
 
     auto hilltop = std::make_shared<Room>(
-        "Hilltop",
-        "You stand on a hilltop with a view of the entire forest and house.\n "
-        "A telescope sits mounted here, aimed at the stars. You can go south to return behind the house or up into the observatory."
-    );
+    "Hilltop",
+    "You stand on a hilltop with a view of the entire forest and house.\n"
+    "A telescope sits mounted here, aimed at the stars.\n"
+    "**A locked door leads up into the observatory.**\n"
+    "You can go south to return behind the house or up into the observatory."
+    );  
 
     auto observatory = std::make_shared<Room>(
         "Observatory",
@@ -92,8 +95,15 @@ int main() {
     Passage::createBasicPassage(behind_house.get(), hilltop.get(), "north", true);
     Passage::createBasicPassage(hilltop.get(), behind_house.get(), "south", true);
 
-    Passage::createBasicPassage(hilltop.get(), observatory.get(), "up", true);
-    Passage::createBasicPassage(observatory.get(), hilltop.get(), "down", true);
+    auto doorToObservatory = std::make_shared<Door>(hilltop.get(), observatory.get(), "up", "key");
+    hilltop->addPassage("up", doorToObservatory);
+
+    auto passageDown = std::make_shared<Passage>(
+    "Observatory_to_Hilltop",
+    "A narrow stairway leading down.",
+    observatory.get(),
+    hilltop.get()
+    );
 
     Passage::createBasicPassage(observatory.get(), secret_room.get(), "up", true);
     Passage::createBasicPassage(secret_room.get(), observatory.get(), "down", true);

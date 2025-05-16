@@ -31,6 +31,8 @@ public:
 
     void addItem(Item* item);
     bool removeItem(const std::string& name);
+    bool hasItem(const std::string& name) const;  // ✅ Add this
+
     Item* getItem(const std::string& name);
     const std::vector<Item*>& getInventory() const;
 

@@ -24,8 +24,34 @@ Explore a 10-room world, collect items, and interact with the environment using 
   - `take <item>`, `drop <item>`  
   - `inventory`, `quit`
 
-    <img width="478" alt="Screenshot 2025-05-13 at 20 46 28" src="https://github.com/user-attachments/assets/c253a449-1033-4c18-a657-0adf9f4cda88" />
+</details>
 
+---
+
+<details>
+<summary>🔐 New Feature: Locked Door (`Door` Class)</summary>
+
+### 🔐 Description
+A new `Door` class has been added to enhance exploration by gating certain areas behind item requirements.  
+Players must possess a specific item (e.g., `key`) to open the door.
+
+### 📂 New Files
+- `Door.h` – Declares the `Door` class (inherits from `Passage`)
+- `Door.cpp` – Implements logic for item-checking traversal
+
+### 🔧 Modified Files
+- `main.cpp` – Replaces standard `Passage` from Hilltop → Observatory with a `Door` that requires a `key`
+- `Player.h` / `Player.cpp` – Added `hasItem()` method to check inventory
+- `Passage.h` / `Passage.cpp` – Added virtual `canTraverse()` and `traverse()` methods for polymorphism
+- `ZOOrkEngine.cpp` – Updated `handleGoCommand()` to always call `traverse()`, but only call `enter()` if `canTraverse()` returns true
+
+### 🚪 Door Behavior
+- A locked door is placed between **Hilltop** and **Observatory**
+- Requires the **key** (found in the **Dark Cave**) to unlock
+- Shows helpful message if player lacks the item:
+  ```
+  The door is locked. You need a key to pass.
+  ```
 
 </details>
 
@@ -58,6 +84,8 @@ go north        or: n
 go south        or: s  
 go east         or: e  
 go west         or: w  
+go up/down      or: u/d  
+go in/out
 look            or: look <item>  
 take <item>  
 drop <item>  
@@ -70,7 +98,7 @@ quit
 ---
 
 <details>
-<summary>🎮 Sample Game Run (Find the Secret Room)</summary>
+<summary>🎮 Sample Game Run (Find the Secret Room with Locked Door)</summary>
 
 ```
 You are standing in an open field west of a white house...
@@ -84,8 +112,6 @@ You are standing in an open field west of a white house...
 > take shovel  
 > go in  
 > take key  
-> go down  
-> take vial  
 > go up  
 > go up  
 > go north  
@@ -113,6 +139,17 @@ You are carrying:
 - orb
 ```
 
+### 🔐 Locked Door Interaction
+
+```
+> go up
+The door is locked. You need a key to pass.
+
+> take key
+> go up
+You unlock the door using the key and pass through.
+```
+
 </details>
 
 ---
@@ -122,30 +159,28 @@ You are carrying:
 
 ### 🗂️ `main.cpp`
 - Built 10 fully connected rooms  
-- Placed unique interactive items in various locations  
-- Linked rooms using bidirectional `Passage` objects  
+- Placed interactive items in various locations  
+- Introduced locked `Door` passage between hilltop and observatory
 
 ### 🏠 `Room.cpp` / `Room.h`
-- Added room inventory system with:
-  - `addItem()`, `removeItem()`, `getItem()`  
-- Overridden `getPassage()` to return `NullPassage` for invalid directions  
+- Room inventory system (`addItem()`, `removeItem()`, `getItem()`)  
+- Overridden `getPassage()` to safely return a `NullPassage`  
 
 ### 👤 `Player.cpp` / `Player.h`
-- Implemented player inventory using `std::vector<Item*>`  
-- Added:
-  - `addItem()`, `removeItem()`, `getInventory()`  
+- Singleton player with inventory using `std::vector<Item*>`  
+- `hasItem()` now allows doors to validate key possession  
 
 ### ⚙️ `ZOOrkEngine.cpp` / `ZOOrkEngine.h`
-- Built command handlers:
-  - `handleGoCommand()` (with direction alias support: `n`, `e`, etc.)  
-  - `handleTakeCommand()`, `handleDropCommand()`  
-  - `handleLookCommand()`, `handleInventoryCommand()`, `handleQuitCommand()`  
-- Added default error handling for unknown or invalid commands  
+- Enhanced `handleGoCommand()` to always call `traverse()`, and conditionally `enter()`  
+- Direction aliasing for commands like `n`, `s`, `u`, `d`
+
+### 🧱 `Passage.cpp` / `Passage.h`
+- Added polymorphic `canTraverse()` and `traverse()` methods  
+- Base behavior allows free traversal; `Door` overrides it
 
 ### 🚫 `NullPassage.cpp` / `NullPassage.h`
-- Implemented **Null Object Pattern** for invalid moves  
-- Displays message: `"You can't go that way."`  
-- Prevents null pointer dereferencing and crashes  
+- Implements Null Object Pattern for invalid directions  
+- Prevents crashes due to null pointer access
 
 </details>
 
@@ -154,12 +189,13 @@ You are carrying:
 <details>
 <summary>📝 Notes</summary>
 
-- ✅ Built with modern **C++17**  
-- 🧩 Fully modular and scalable for more features  
-- 🎮 Playable directly in any terminal  
-- 🐧 Works on **macOS** and **Linux**  
-- 🛠️ Can be extended with puzzles, enemies, or more rooms  
+- ✅ Built using modern **C++17**  
+- 🔄 Easily extensible: NPCs, puzzles, achievements  
+- 🕹️ Modular and stable for future features  
+- 💡 Sample extensibility ideas:
+  - Talk to NPCs (`talk <name>`)
+  - Use/activate items
+  - Status tags like `cursed`, `flying`, `brave`
+  - Timed puzzles or combat system
 
 </details>
-
-
