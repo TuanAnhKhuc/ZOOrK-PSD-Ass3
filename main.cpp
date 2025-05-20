@@ -7,7 +7,10 @@
 
 
 int main() {
-    // Create rooms with embedded hints and path guidance
+ // --- Room Creation Section ---
+
+    // Create each room with a name and description.
+    // These descriptions give hints and directions to the player.
     auto start = std::make_shared<Room>(
         "Start",
         "You are standing in an open field west of a white house, with a boarded front door.\n "
@@ -72,8 +75,10 @@ int main() {
         "You have discovered a secret room hidden above in the observatory.\n "
         "A glowing orb pulses softly on a pedestal. You can go down to return to the observatory."
     );
+// --- Passage Creation Section ---
 
-   // Connect rooms with passages (bidirectional)
+// Connect rooms together using passages (some directional, some locked)
+// BasicPassages are two-way unless otherwise stated
     Passage::createBasicPassage(start.get(), south_of_house.get(), "south", true);
     Passage::createBasicPassage(south_of_house.get(), start.get(), "north", true);
 
@@ -95,9 +100,11 @@ int main() {
     Passage::createBasicPassage(behind_house.get(), hilltop.get(), "north", true);
     Passage::createBasicPassage(hilltop.get(), behind_house.get(), "south", true);
 
+// Create a DOOR from hilltop to observatory (requires "key")
     auto doorToObservatory = std::make_shared<Door>(hilltop.get(), observatory.get(), "up", "key");
-    hilltop->addPassage("up", doorToObservatory);
+    hilltop->addPassage("up", doorToObservatory); // Player needs key to use this
 
+// Create passage back down from observatory (no key required)
     auto passageDown = std::make_shared<Passage>(
     "Observatory_to_Hilltop",
     "A narrow stairway leading down.",
@@ -105,11 +112,14 @@ int main() {
     hilltop.get()
     );
 
+  // Secret room above the observatory
     Passage::createBasicPassage(observatory.get(), secret_room.get(), "up", true);
     Passage::createBasicPassage(secret_room.get(), observatory.get(), "down", true);
 
 
- // Example items
+// --- Item Creation Section ---
+
+// Create example items
     auto torch = new Item("torch", "A bright torch that can light up dark places.");
     auto key = new Item("key", "A small brass key with a faded number.");
     auto map = new Item("map", "An old, crumpled map showing part of the mansion.");
@@ -119,7 +129,7 @@ int main() {
     auto telescope = new Item("telescope", "A telescope aimed at the stars.");
     auto orb = new Item("orb", "A glowing orb that pulses softly with energy.");
 
-    // Add items to specific rooms
+// Place items into specific rooms
     start->addItem(torch);
     dark_cave->addItem(key);
     observatory->addItem(map);
@@ -130,10 +140,12 @@ int main() {
     secret_room->addItem(orb);
 
 
-    // Set starting room for player
+ // --- Engine Initialization ---
+
+// Initialize the ZOOrkEngine and start the game loop from the start room
     ZOOrkEngine engine(start);
 
-    engine.run();
+    engine.run(); // Launches the main game loop
 
     return 0;
 }

@@ -7,21 +7,25 @@
 #include <utility>
 
 ZOOrkEngine::ZOOrkEngine(std::shared_ptr<Room> start) {
+    // Get the singleton instance of the Player
     player = Player::instance();
+    // Set the player's starting location
     player->setCurrentRoom(start.get());
+    // Trigger the room's entry behavior (e.g., show description)
     player->getCurrentRoom()->enter();
 }
 
 void ZOOrkEngine::run() {
     while (!gameOver) {
-        std::cout << "> ";
+        std::cout << "> "; // Prompt for user input
 
         std::string input;
-        std::getline(std::cin, input);
+        std::getline(std::cin, input); // Get full command input
 
         std::vector<std::string> words = tokenizeString(input);
         std::string command = words[0];
         std::vector<std::string> arguments(words.begin() + 1, words.end());
+    // Handle command types    
     if (command == "go") {
         handleGoCommand(arguments);
     } else if ((command == "look") || (command == "inspect")) {
@@ -38,12 +42,13 @@ void ZOOrkEngine::run() {
     }
 }
 
+// Handles "go <direction>" command
 void ZOOrkEngine::handleGoCommand(std::vector<std::string> arguments) {
     if (arguments.empty()) {
         std::cout << "Go where?\n";
         return;
     }
-
+    // Normalize shorthand directions
     std::string direction;
     if (arguments[0] == "n" || arguments[0] == "north") direction = "north";
     else if (arguments[0] == "s" || arguments[0] == "south") direction = "south";
@@ -54,14 +59,15 @@ void ZOOrkEngine::handleGoCommand(std::vector<std::string> arguments) {
     else direction = arguments[0];
 
     Room* currentRoom = player->getCurrentRoom();
-    auto passage = currentRoom->getPassage(direction);
+    auto passage = currentRoom->getPassage(direction); // Get passage from room
 
-    // ✅ Prevent switching rooms if this is a NullPassage
+    // Handle case where passage is invalid (e.g., wall)
     if (dynamic_cast<NullPassage*>(passage.get()) != nullptr) {
         passage->enter();  // just say "you can't go that way"
         return;
     }
 
+    // Attempt traversal and display message
     passage->traverse(player);  // Always show appropriate message
 
     if (passage->canTraverse(player)) {
@@ -69,6 +75,7 @@ void ZOOrkEngine::handleGoCommand(std::vector<std::string> arguments) {
     }
 }
 
+// Handles "look" or "inspect" command
 void ZOOrkEngine::handleLookCommand(std::vector<std::string> arguments) {
     Room* currentRoom = player->getCurrentRoom();
 
@@ -76,6 +83,7 @@ void ZOOrkEngine::handleLookCommand(std::vector<std::string> arguments) {
         // No target: describe the current room
         std::cout << currentRoom->getDescription() << "\n";
     } else {
+        // Try to inspect a specific object in the room
         std::string targetName = arguments[0];
         GameObject* target = currentRoom->getObject(targetName);
 
@@ -87,6 +95,7 @@ void ZOOrkEngine::handleLookCommand(std::vector<std::string> arguments) {
     }
 }
 
+// Handles "take <item>" command
 void ZOOrkEngine::handleTakeCommand(std::vector<std::string> arguments) {
     if (arguments.empty()) {
         std::cout << "Take what?\n";
@@ -95,18 +104,18 @@ void ZOOrkEngine::handleTakeCommand(std::vector<std::string> arguments) {
 
     std::string itemName = arguments[0];
     Room* currentRoom = player->getCurrentRoom();
-    Item* item = currentRoom->getItem(itemName);
+    Item* item = currentRoom->getItem(itemName); // Find item in room
 
     if (item != nullptr) {
-        player->addItem(item);
-        currentRoom->removeItem(itemName);
+        player->addItem(item); // Add to player's inventory
+        currentRoom->removeItem(itemName); // Remove from room
         std::cout << "You take the " << itemName << ".\n";
     } else {
         std::cout << "There is no \"" << itemName << "\" here.\n";
     }
 }
 
-
+// Handles "drop <item>" command
 void ZOOrkEngine::handleDropCommand(std::vector<std::string> arguments) {
     if (arguments.empty()) {
         std::cout << "Drop what?\n";
@@ -118,15 +127,15 @@ void ZOOrkEngine::handleDropCommand(std::vector<std::string> arguments) {
 
     if (item != nullptr) {
         Room* currentRoom = player->getCurrentRoom();
-        player->removeItem(itemName);
-        currentRoom->addItem(item);
+        player->removeItem(itemName); // Remove from inventory
+        currentRoom->addItem(item);  // Place into room
         std::cout << "You drop the " << itemName << ".\n";
     } else {
         std::cout << "You don't have a \"" << itemName << "\".\n";
     }
 }
 
-
+// Handles "quit" command
 void ZOOrkEngine::handleQuitCommand(std::vector<std::string> arguments) {
     std::string input;
     std::cout << "Are you sure you want to QUIT?\n> ";
@@ -138,6 +147,7 @@ void ZOOrkEngine::handleQuitCommand(std::vector<std::string> arguments) {
     }
 }
 
+// Handles "inventory" command
 void ZOOrkEngine::handleInventoryCommand() {
     std::cout << "You are carrying:\n";
 
@@ -151,7 +161,7 @@ void ZOOrkEngine::handleInventoryCommand() {
         std::cout << "Nothing.\n";
     }
 }
-
+// Player inventory getter (for displaying items)
 const std::vector<Item*>& Player::getInventory() const {
     return inventory;
 }
