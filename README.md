@@ -64,6 +64,7 @@ Players must possess a specific item (e.g., `key`) to open the door.
 <summary>🚀 Build & Run</summary>
 
 ```bash
+mkir build
 cd build
 cmake ..
 cmake --build .
